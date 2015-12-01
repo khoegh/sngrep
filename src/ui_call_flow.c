@@ -656,8 +656,9 @@ call_flow_draw_rtp_stream(PANEL *panel, call_flow_arrow_t *arrow, int cline)
         mvwaddch(win, cline, endpos - 2, '>');
         if (arrow->rtp_count != stream_get_count(stream)) {
             arrow->rtp_count = stream_get_count(stream);
-            arrow->rtp_ind_pos = (arrow->rtp_ind_pos + 1) % distance;
-            mvwaddch(win, cline, startpos + arrow->rtp_ind_pos + 2, '>');
+            arrow->rtp_ind_pos++;
+            wattron(win, COLOR_PAIR(CP_BLUE_ON_DEF));
+            mvwaddch(win, cline, startpos + (arrow->rtp_ind_pos % distance), '>');
         }
     } else {
         if (!setting_has_value(SETTING_CF_SDP_INFO, "compressed")) {
@@ -667,15 +668,16 @@ call_flow_draw_rtp_stream(PANEL *panel, call_flow_arrow_t *arrow, int cline)
         mvwaddch(win, cline, startpos + 2, '<');
         if (arrow->rtp_count != stream_get_count(stream)) {
             arrow->rtp_count = stream_get_count(stream);
-            arrow->rtp_ind_pos = (arrow->rtp_ind_pos + 1) % distance;
-            mvwaddch(win, cline, endpos - arrow->rtp_ind_pos - 2, '<');
+            arrow->rtp_ind_pos++;
+            wattron(win, COLOR_PAIR(CP_BLUE_ON_DEF));
+            mvwaddch(win, cline, endpos - (arrow->rtp_ind_pos % distance) - 2, '<');
         }
     }
 
     if (setting_has_value(SETTING_CF_SDP_INFO, "compressed"))
         mvwprintw(win, cline, startpos + (distance) / 2 - strlen(text) / 2 + 2, " %s ", text);
 
-    wattroff(win, A_BOLD | A_REVERSE);
+    wattroff(win, A_BOLD | A_REVERSE | COLOR_PAIR(CP_BLUE_ON_DEF));
 
     // Print timestamp
     timeval_to_time(stream->time, time);
