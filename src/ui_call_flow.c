@@ -649,7 +649,7 @@ call_flow_draw_rtp_stream(PANEL *panel, call_flow_arrow_t *arrow, int cline)
     if (arrow->rtp_count == stream_get_count(stream)) {
         arrow->rtp_alive--;
     } else {
-        arrow->rtp_alive = 10;
+        arrow->rtp_alive = 5;
     }
 
     // Update internal packet counter for this stream
@@ -892,7 +892,7 @@ call_flow_next_arrow(PANEL *panel, const call_flow_arrow_t *cur)
         next = sng_malloc(sizeof(call_flow_arrow_t));
         next->type = (stream->type == CAPTURE_PACKET_RTP) ? CF_ARROW_RTP : CF_ARROW_RTCP;
         next->stream = stream;
-        next->rtp_alive = 10;
+        next->rtp_alive = 5;
     } else if (!stream) {
         /* a sip message goes next */
         // Create a new arrow to store next info
@@ -906,7 +906,7 @@ call_flow_next_arrow(PANEL *panel, const call_flow_arrow_t *cur)
             next = sng_malloc(sizeof(call_flow_arrow_t));
             next->type = (stream->type == CAPTURE_PACKET_RTP) ? CF_ARROW_RTP : CF_ARROW_RTCP;
             next->stream = stream;
-            next->rtp_alive = 10;
+            next->rtp_alive = 5;
         } else {
             // Create a new arrow to store next info
             next = sng_malloc(sizeof(call_flow_arrow_t));
